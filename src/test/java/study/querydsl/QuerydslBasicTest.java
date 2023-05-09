@@ -13,6 +13,10 @@ import study.querydsl.entity.Team;
 
 import javax.persistence.EntityManager;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static study.querydsl.entity.QMember.*;
+
 @SpringBootTest
 @Transactional
 public class QuerydslBasicTest {
@@ -50,19 +54,29 @@ public class QuerydslBasicTest {
                 .setParameter("username", "member1")
                 .getSingleResult();
 
-        Assertions.assertThat(findMember.getUsername()).isEqualTo("member1");
+        assertThat(findMember.getUsername()).isEqualTo("member1");
     }
 
     @Test
     public void startQuerydsl(){
-        QMember m = new QMember("m");
+
+        QMember m1 = new QMember("m1");
 
         Member findMember = jpaQueryFactory
-                .select(m)
-                .from(m)
-                .where(m.username.eq("member1"))
+                .select(m1)
+                .from(m1)
+                .where(m1.username.eq("member1"))
                 .fetchOne();
 
-        Assertions.assertThat(findMember.getUsername()).isEqualTo("member1");
+        assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
+
+    @Test
+    public void search(){
+        Member findMember = jpaQueryFactory.selectFrom(member)
+                .where(member.username.eq("member1")
+                        .and(member.age.eq(10)))
+                .fetchOne();
+        assertThat(findMember.getUsername()).isEqualTo("member1");
     }
 }
