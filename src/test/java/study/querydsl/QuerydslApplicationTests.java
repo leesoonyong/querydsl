@@ -10,12 +10,13 @@ import study.querydsl.entity.Hello;
 import study.querydsl.entity.QHello;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @SpringBootTest
 @Transactional
 class QuerydslApplicationTests {
 
-	@Autowired
+	@PersistenceContext
 	EntityManager em;
 
 
